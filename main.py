@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, redirect, session, url_for
-from forms import InputForm, ExcelForm
+from forms import InputForm, ExcelForm, OrgButton
 from excel import addJob
 
 app = Flask(__name__)
@@ -9,6 +9,11 @@ app.config['SECRET_KEY'] = 'secret_stuff'
 def home():
 	form = InputForm()
 	exForm = ExcelForm()
+
+	orgButton = OrgButton()
+
+	if "org" not in session:
+		session["org"] = "date"
 
 	if form.validate_on_submit():
 		print("WOW")
@@ -34,7 +39,17 @@ def home():
 		flash('{}.xlsx Inputted!'.format(exForm.excelName.data),'success')
 		return redirect(url_for('home'))
 
-	return render_template("index.html",form=form,exForm=exForm)
+	if orgButton.validate_on_submit():
+		if orgButton.nameButton.data:
+			session["org"] = "name"
+
+		if orgButton.dateButton.data:
+			session["org"] = "date"
+
+		if orgButton.importanceButton.data:
+			session["org"] = "importance"
+
+	return render_template("index.html",form=form,exForm=exForm,orgButton=orgButton)
 
 
 if __name__ == '__main__':

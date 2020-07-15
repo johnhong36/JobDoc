@@ -14,3 +14,8 @@ class InputForm(FlaskForm):
 class ExcelForm(FlaskForm):
 	excelName = StringField('Excel File Name',validators=[DataRequired()])
 	excelSubmit = SubmitField('Submit',validators=None)
+
+class OrgButton(FlaskForm):
+	nameButton = SubmitField('Name',validators=None)
+	dateButton = SubmitField('Date',validators=None)
+	importanceButton = SubmitField('Importance',validators=None)
