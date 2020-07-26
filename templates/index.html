@@ -203,15 +203,34 @@
 
 				<form method="POST" action="">
 					{{ form.csrf_token }}
-					{{ orgButton.nameButton(class="btn btn-success btn-lg") }}
-					&nbsp;
-					&nbsp;
-					{{ orgButton.dateButton(class="btn btn-secondary btn-lg") }}
-					&nbsp;
-					&nbsp;
-					{{ orgButton.importanceButton(class="btn btn-danger btn-lg") }}
-				</form>
 
+					{% if buttonSession=="name" %}
+						{{ orgButton.nameButton(class="btn btn-success btn-lg") }}
+					{% endif %}
+					{% if buttonSession!="name" %}
+						{{ orgButton.nameButton(class="btn btn-secondary btn-lg") }}
+					{% endif %}
+
+					&nbsp;
+					&nbsp;
+
+					{% if buttonSession=="date" %}
+						{{ orgButton.dateButton(class="btn btn-success btn-lg") }}
+					{% endif %}
+					{% if buttonSession!="date" %}
+						{{ orgButton.dateButton(class="btn btn-secondary btn-lg") }}
+					{% endif %}
+
+					&nbsp;
+					&nbsp;
+
+					{% if buttonSession=="importance" %}
+						{{ orgButton.importanceButton(class="btn btn-success btn-lg") }}
+					{% endif %}
+					{% if buttonSession!="importance" %}
+						{{ orgButton.importanceButton(class="btn btn-secondary btn-lg") }}
+					{% endif %}
+				</form>
 			</div>
 
 		</div>
