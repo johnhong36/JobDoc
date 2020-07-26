@@ -231,6 +231,46 @@
 						{{ orgButton.importanceButton(class="btn btn-secondary btn-lg") }}
 					{% endif %}
 				</form>
+
+				<div>&nbsp; </div>
+				<div>&nbsp; </div>
+				<div>&nbsp; </div>
+
+				<h4>Enter a Job Listing</h4>
+				<div>&nbsp; </div>
+
+				<form method="POST" action="" autocomplete="off">
+					{{ form.csrf_token }}
+
+					<div class="row">
+						<div class="col-5">
+							{{ autoForm.website.label(class="form-control-label") }}
+						</div>
+						<div class="col-5">
+							{{ autoForm.importance.label(class="form-control-label")}}
+						</div>
+
+					</div>
+
+					<div class="row">
+						<div class="col-5">
+							 {{ autoForm.website(class="form control")}}
+						</div>
+						<div class="col-5">
+							{{ autoForm.importance(class="form control")}}
+						</div>
+					</div>
+
+					<div>&nbsp; </div>
+
+					<div class="row">
+						<div class="col-5">
+                    		{{ autoForm.submit(class="btn btn-outline-info") }}
+						</div>
+                  	</div>
+
+				</form>
+
 			</div>
 
 		</div>
