@@ -107,8 +107,8 @@
 	<div>&nbsp; </div>
 
 	<div class="container">
-		<div class="row-cols-7">
-      		<div class="col-md-6">
+		<div class="row">
+      		<div class="col">
 				<div class="row">
 					<div class="col-5">
 		            	{% with messages = get_flashed_messages(with_categories=true)  %}
@@ -196,9 +196,44 @@
     			</form>
 
 			</div>
+			<div class="col">
+
+				<h4>Organize By</h4>
+				<div>&nbsp; </div>
+
+				<form method="POST" action="">
+					{{ form.csrf_token }}
+
+					{% if buttonSession=="name" %}
+						{{ orgButton.nameButton(class="btn btn-success btn-lg") }}
+					{% endif %}
+					{% if buttonSession!="name" %}
+						{{ orgButton.nameButton(class="btn btn-secondary btn-lg") }}
+					{% endif %}
+
+					&nbsp;
+					&nbsp;
+
+					{% if buttonSession=="date" %}
+						{{ orgButton.dateButton(class="btn btn-success btn-lg") }}
+					{% endif %}
+					{% if buttonSession!="date" %}
+						{{ orgButton.dateButton(class="btn btn-secondary btn-lg") }}
+					{% endif %}
+
+					&nbsp;
+					&nbsp;
+
+					{% if buttonSession=="importance" %}
+						{{ orgButton.importanceButton(class="btn btn-success btn-lg") }}
+					{% endif %}
+					{% if buttonSession!="importance" %}
+						{{ orgButton.importanceButton(class="btn btn-secondary btn-lg") }}
+					{% endif %}
+				</form>
+			</div>
 
 		</div>
-
 	</div>
 
 
