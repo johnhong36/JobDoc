@@ -34,9 +34,22 @@ def home():
 
 			sortExcel(session["excel"],session["org"])
 
-			companyExample = Company(name = form.name.data)
-			db.session.add(companyExample)
-			db.session.commit()
+			companyList = [company.name for company in Company.query.all()]
+			skillList = [skill.name for skill in Skill.query.all()]
+
+			if form.name.data not in companyList:
+				companyExample = Company(name = form.name.data)
+				db.session.add(companyExample)
+				db.session.commit()
+			
+			for skill in form.languages.data.split(","):
+				if skill[0] == " ":
+					skill = skill[1:]
+
+				if skill.lower() not in skillList:
+					skillExample = Skill(name = skill.lower())
+					db.session.add(skillExample)
+					db.session.commit()
 
 		return redirect(url_for('home'))
 

@@ -7,7 +7,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 import requests
-import time
 
 
 DRIVER_PATH = "/home/jhong/chromedriver/chromedriver_linux64/chromedriver"

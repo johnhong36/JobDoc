@@ -9,7 +9,7 @@ class Company(db.Model):
 		self.name = name
 
 	def __repr__(self):
-		return "Name: " + self.name
+		return self.name
 
 
 class Skill(db.Model):
@@ -21,4 +21,4 @@ class Skill(db.Model):
 		self.name = name
 
 	def __repr__(self):
-		return "Skill: " + self.name
+		return self.name
