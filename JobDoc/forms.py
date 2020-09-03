@@ -19,3 +19,8 @@ class OrgButton(FlaskForm):
 	nameButton = SubmitField('Name',validators=None)
 	dateButton = SubmitField('Date',validators=None)
 	importanceButton = SubmitField('Importance',validators=None)
+
+class AutoForm(FlaskForm):
+	website = StringField('Website',validators=[DataRequired()])
+	importance = IntegerField('Importance (1-5)',validators=[DataRequired(),NumberRange(min=1,max=5)])
+	submit = SubmitField('Enter',validators=None)
