@@ -1,27 +1,46 @@
-from bs4 import BeautifulSoup
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-import requests
+from JobDoc.database import Company, Skill
 
 
 DRIVER_PATH = "/home/jhong/chromedriver/chromedriver_linux64/chromedriver"
 options = Options()
 options.headless = True
 
-def scrapeData(website:str):
-    source = requests.get(website).content
-    soup = BeautifulSoup(source,"lxml")
-    print(soup.prettify())
+def scrapeAll(website:str):
+    driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
+    driver.get(website)
 
+    a_Text = driver.find_elements_by_tag_name('a')
+    for z in a_Text:
+        print(z.text)
+    
+    h1_Text = driver.find_elements_by_tag_name('h1')
+    for z in h1_Text:
+        print(z.text)
 
-    return soup
+    p_Text = driver.find_elements_by_tag_name('p')
+    for x in p_Text:
+        print(x.text)
 
-    #Indeed, Linkedn, Monster, Ziprecruiter
+    br_Text = driver.find_elements_by_tag_name('br')
+    for y in br_Text:
+        print(y.text)
+
+    li_Text = driver.find_elements_by_tag_name('li')
+    for z in li_Text:
+        print(z.text)
+
+    #print(driver.page_source)
+
+    driver.quit()
+
+    return "None", "None"
+    
 
 def scrapeIndeed(website:str):
     
@@ -30,18 +49,15 @@ def scrapeIndeed(website:str):
 
     nameXPath = "//div[@class='icl-u-lg-mr--sm icl-u-xs-mr--xs']"
     nameElem = driver.find_element_by_xpath(nameXPath)
-    print(nameElem.text)
-
+    name = nameElem.text
 
     descXPath = "//div[@class='jobsearch-jobDescriptionText']"
     descElem = driver.find_element_by_xpath(descXPath)
-    print(descElem.text)
-
+    skills = getSkills(descElem.text)
 
     driver.quit()
 
-    #print(driver.page_source)
-    #Indeed, Linkedn, Monster, Ziprecruiter
+    return name, skills
 
 
 def scrapeZipRecruiter(website:str):
@@ -51,15 +67,15 @@ def scrapeZipRecruiter(website:str):
 
     nameXPath = "//a[@class='job_details_link']"
     nameElem = driver.find_element_by_xpath(nameXPath)
-    print(nameElem.text)
+    name = nameElem.text
 
     descXPath = "//div[@class='jobDescriptionSection']"
     descElem = driver.find_element_by_xpath(descXPath)
-    print(descElem.text)
+    skills = getSkills(descElem.text)
 
     driver.quit()
-    
-    #print(driver.page_source)
+
+    return name, skills
 
 
 def scrapeLinkedin(website:str):
@@ -72,21 +88,38 @@ def scrapeLinkedin(website:str):
 
     nameXPath = "//a[@class='topcard__org-name-link topcard__flavor--black-link']"
     nameElem = driver.find_element_by_xpath(nameXPath)
-    print(nameElem.text)
+    name = nameElem.text
 
     descXPath = "//div[@class='description__text description__text--rich']"
     descElem = driver.find_element_by_xpath(descXPath)
-    print(descElem.text)
-
-    #print(driver.page_source)
+    skills = getSkills(descElem.text)
 
     driver.quit()
 
-if __name__ == "__main__":
-    # scrapeIndeed("https://www.indeed.com/q-Software-Engineer-jobs.html?advn=5014086920423836&vjk=b2dda17b12a5ed79")
-    #scrapeZipRecruiter("https://www.ziprecruiter.com/jobs/tusimple-87c8fb36/software-engineer-full-stack-autonomous-driving-san-diego-105c41e6?lvk=NZ4BvBk3xufoOwwRvDSqQg.--LgmoJtx5-")
-    #scrapeZipRecruiter("https://www.ziprecruiter.com/jobs/voice-7c2d77f3/software-engineer-mobile-android-c49bfae6?lvk=rvH7MzFZpn824Km1Kt395Q.--Lgo40fOCk")
-    scrapeLinkedin("https://www.linkedin.com/jobs/view/software-engineer-at-rightclick-1964159937?refId=20378dc5-fd17-4874-a927-c0517efcfe47&trk=public_jobs_topcard_title")
+    return name, skills
 
+
+def getSkills(descText):
+    descList = descText.split(" ")
+    skillList = {skill.name for skill in Skill.query.all()}
+    jobSkills = []
+    lower = []
+    returnVal = ""
+
+    for word in descList:
+        if word[-1] == ",":
+            word = word[:-1]
+
+        if word.lower() in skillList and word.lower() not in lower:
+            jobSkills.append(word)
+            lower.append(word.lower())
 
     
+    for index in range(len(jobSkills)):
+        if index == 4 or index == len(jobSkills)-1:
+            returnVal += jobSkills[index]
+            break
+        else:
+            returnVal += jobSkills[index] + ", "
+
+    return returnVal

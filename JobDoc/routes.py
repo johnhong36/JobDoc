@@ -3,6 +3,8 @@ from JobDoc import app, db
 from JobDoc.forms import InputForm, ExcelForm, OrgButton, AutoForm
 from JobDoc.excel import addJob, sortExcel
 from JobDoc.database import Company, Skill
+from JobDoc.webscrape import scrapeIndeed, scrapeZipRecruiter, scrapeLinkedin, scrapeAll
+from datetime import date
 
 
 @app.route("/", methods=['GET','POST'])
@@ -34,8 +36,8 @@ def home():
 
 			sortExcel(session["excel"],session["org"])
 
-			companyList = [company.name for company in Company.query.all()]
-			skillList = [skill.name for skill in Skill.query.all()]
+			companyList = {company.name for company in Company.query.all()}
+			skillList = {skill.name for skill in Skill.query.all()}
 
 			if form.name.data not in companyList:
 				companyExample = Company(name = form.name.data)
@@ -73,6 +75,37 @@ def home():
 			sortExcel(session["excel"],session["org"])
 		
 	if autoForm.validate_on_submit():
-		print("HI")
+		if "indeed" in autoForm.website.data:
+			name, skills = scrapeIndeed(autoForm.website.data)
+
+		elif "ziprecruiter" in autoForm.website.data:
+			name, skills = scrapeZipRecruiter(autoForm.website.data)
+		
+		elif "linkedin" in autoForm.website.data:
+			name, skills = scrapeLinkedin(autoForm.website.data)
+
+		else:
+			name, skills = scrapeAll(autoForm.website.data)
+
+		companyList = {company.name for company in Company.query.all()}
+		if name not in companyList:
+			companyExample = Company(name = name)
+			db.session.add(companyExample)
+			db.session.commit()
+		
+		if "excel" in session:
+			excel = session["excel"]
+			inputData = {}
+			inputData["name"] = name
+			inputData["date"] = date.today()
+			inputData["importance"] = autoForm.importance.data
+			inputData["languages"] = skills
+			inputData["website"] = autoForm.website.data
+
+			addJob(excel,inputData)
+
+			sortExcel(session["excel"],session["org"])
+
+		return redirect(url_for('home'))
 
 	return render_template("index.html",form=form,exForm=exForm,orgButton=orgButton,buttonSession=session["org"],autoForm=autoForm)
