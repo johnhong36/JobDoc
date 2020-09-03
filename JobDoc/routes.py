@@ -64,14 +64,14 @@ def home():
 	if orgButton.validate_on_submit():
 		if orgButton.nameButton.data:
 			session["org"] = "name"
-			sortExcel(session["excel"],session["org"])
 
 		if orgButton.dateButton.data:
 			session["org"] = "date"
-			sortExcel(session["excel"],session["org"])
 
 		if orgButton.importanceButton.data:
 			session["org"] = "importance"
+		
+		if session["excel"]:
 			sortExcel(session["excel"],session["org"])
 		
 	if autoForm.validate_on_submit():
@@ -105,6 +105,8 @@ def home():
 			addJob(excel,inputData)
 
 			sortExcel(session["excel"],session["org"])
+
+			flash('{} Added.'.format(name),'success')
 
 		return redirect(url_for('home'))
 

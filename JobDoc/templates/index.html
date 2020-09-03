@@ -174,7 +174,7 @@
 			            	{% with messages = get_flashed_messages(with_categories=true)  %}
 			                	{% if messages %}
 			                		{% for category, message in messages %}
-										{% if "Added" in message %}
+										{% if "Added!" in message %}
 											<div class = "alert alert-{{ category }}">
 				                            	{{ message }}
 				                        	</div>
@@ -261,7 +261,25 @@
 						<div class="col-5">
                     		{{ autoForm.submit(class="btn btn-outline-info") }}
 						</div>
-                  	</div>
+					</div>
+					
+					<div>&nbsp; </div>
+
+					<div class="row">
+						<div class="col-5">
+			            	{% with messages = get_flashed_messages(with_categories=true)  %}
+			                	{% if messages %}
+			                		{% for category, message in messages %}
+										{% if "Added." in message %}
+											<div class = "alert alert-{{ category }}">
+				                            	{{ message }}
+				                        	</div>
+										{% endif %}
+			                    	{% endfor %}
+			                	{% endif %}
+			            	{% endwith %}
+						</div>
+					</div>
 
 				</form>
 
