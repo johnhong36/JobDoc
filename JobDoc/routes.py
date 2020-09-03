@@ -5,6 +5,7 @@ from JobDoc.excel import addJob, sortExcel
 from JobDoc.database import Company, Skill
 from JobDoc.webscrape import scrapeIndeed, scrapeZipRecruiter, scrapeLinkedin, scrapeAll
 from datetime import date
+import os.path
 
 
 @app.route("/", methods=['GET','POST'])
@@ -56,8 +57,13 @@ def home():
 		return redirect(url_for('home'))
 
 	if exForm.validate_on_submit():
-		session["excel"] = exForm.excelName.data
-		flash('{}.xlsx Inputted!'.format(exForm.excelName.data),'success')
+		if os.path.isfile(exForm.excelName.data+".xlsx"):
+			session["excel"] = exForm.excelName.data
+			flash('{}.xlsx Inputted!'.format(exForm.excelName.data),'success')
+
+		else:
+			session["excel"] = None
+			flash('{}.xlsx Not Found!'.format(exForm.excelName.data),'danger')
 
 		return redirect(url_for('home'))
 
@@ -85,7 +91,8 @@ def home():
 			name, skills = scrapeLinkedin(autoForm.website.data)
 
 		else:
-			name, skills = scrapeAll(autoForm.website.data)
+			flash('Job Not Added.','danger')
+			return redirect(url_for('home'))
 
 		companyList = {company.name for company in Company.query.all()}
 		if name not in companyList:
