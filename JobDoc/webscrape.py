@@ -63,11 +63,11 @@ def scrapeZipRecruiter(website:str):
     driver = webdriver.Chrome(options=options)
     driver.get(website)
 
-    nameXPath = "//a[@class='job_details_link']"
+    nameXPath = "//span[@class='job_location_item job_location_name']"
     nameElem = driver.find_element_by_xpath(nameXPath)
     name = nameElem.text
 
-    descXPath = "//div[@class='jobDescriptionSection']"
+    descXPath = "//div[@id='job_desc']"
     descElem = driver.find_element_by_xpath(descXPath)
     skills = getSkills(descElem.text)
 
