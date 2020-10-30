@@ -57,7 +57,7 @@ def home():
 		return redirect(url_for('home'))
 
 	if exForm.validate_on_submit():
-		if os.path.isfile(exForm.excelName.data+".xlsx"):
+		if os.path.isfile("file/"+exForm.excelName.data+".xlsx"):
 			session["excel"] = exForm.excelName.data
 			flash('{}.xlsx Inputted!'.format(exForm.excelName.data),'success')
 

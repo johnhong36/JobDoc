@@ -6,13 +6,13 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from JobDoc.database import Company, Skill
 
-
-DRIVER_PATH = "/home/jhong/chromedriver/chromedriver_linux64/chromedriver"
 options = Options()
-options.headless = True
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--headless')
 
 def scrapeAll(website:str):
-    driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
+    driver = webdriver.Chrome(options=options)
     driver.get(website)
 
     a_Text = driver.find_elements_by_tag_name('a')
@@ -43,8 +43,7 @@ def scrapeAll(website:str):
     
 
 def scrapeIndeed(website:str):
-    
-    driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
+    driver = webdriver.Chrome(options=options)
     driver.get(website)
 
     nameXPath = "//div[@class='icl-u-lg-mr--sm icl-u-xs-mr--xs']"
@@ -61,15 +60,14 @@ def scrapeIndeed(website:str):
 
 
 def scrapeZipRecruiter(website:str):
-    
-    driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
+    driver = webdriver.Chrome(options=options)
     driver.get(website)
 
-    nameXPath = "//a[@class='job_details_link']"
+    nameXPath = "//span[@class='job_location_item job_location_name']"
     nameElem = driver.find_element_by_xpath(nameXPath)
     name = nameElem.text
 
-    descXPath = "//div[@class='jobDescriptionSection']"
+    descXPath = "//div[@id='job_desc']"
     descElem = driver.find_element_by_xpath(descXPath)
     skills = getSkills(descElem.text)
 
@@ -79,7 +77,7 @@ def scrapeZipRecruiter(website:str):
 
 
 def scrapeLinkedin(website:str):
-    driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
+    driver = webdriver.Chrome(options=options)
     driver.get(website)
 
     buttonXPath = "//button[@class='show-more-less-html__button show-more-less-html__button--more']"

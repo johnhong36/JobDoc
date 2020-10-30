@@ -1,7 +1,9 @@
 from openpyxl import load_workbook
 
+dockerFolder = "file/"
+
 def addJob(fileName:str,data:dict):
-	filename = fileName+".xlsx"
+	filename = dockerFolder+fileName+".xlsx"
 	workbook = load_workbook(filename)
 	sheet = workbook.active
 	lastRow = sheet.max_row
@@ -31,7 +33,7 @@ def addJob(fileName:str,data:dict):
 
 
 def sortExcel(filename:str,criteria:str):
-	filename = filename+".xlsx"
+	filename = dockerFolder+filename+".xlsx"
 	workbook = load_workbook(filename)
 	sheet = workbook.active
 	lastRow = sheet.max_row
@@ -108,16 +110,3 @@ def setValue(excel:object,rowVal:int,colVal:int,newVal:object):
 	excel.cell(row=rowVal,column=colVal).value = newVal
 
 
-
-
-# if __name__ == "__main__":
-	# ex = {
-	# 	"name": "SRC",
-	# 	"date": "3/6/99",
-	# 	"importance": "4",
-	# 	"languages": "Python",
-	# 	"website": ""
-	# }
-	# addJob("hello_world",ex)
-	# fileName = "ex"
-	# sortExcel(fileName,"date")
